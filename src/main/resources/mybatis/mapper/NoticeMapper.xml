@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lxpnow.blog.mapper.NoticeMapper">
+
+    <sql id="noticeColumn">
+        notice_id,publisher_id,publish_time,publish_title,publish_text
+    </sql>
+
+    <resultMap id="noticeInfo" type="Notice">
+        <id property="noticeId" column="notice_id" ></id>
+        <result property="publishTime" column="publish_time"></result>
+        <result property="publishTitle" column="publish_title" javaType="string"></result>
+        <result property="publishText" column="publish_text" javaType="string"></result>
+        <association property="user" javaType="User">
+            <id property="userId" column="user_id"></id>
+            <result property="username" column="username"></result>
+            <result property="nickname" column="nickname"></result>
+        </association>
+    </resultMap>
+
+
+    <insert id="saveNotice" parameterType="Notice" useGeneratedKeys="true" keyProperty="noticeId">
+        insert into notice (publisher_id,publish_time,publish_title,publish_text)
+        values
+        (#{publisherId},#{publishTime},#{publishTitle},#{publishText})
+    </insert>
+
+    <select id="getNewNotice" resultMap="noticeInfo">
+        select <include refid="noticeColumn"></include>
+        from notice
+        order by publish_time desc
+        limit 1
+    </select>
+
+    <select id="getAllNotice" resultMap="noticeInfo">
+        select <include refid="noticeColumn"></include>,
+        user_id,username ,nickname
+        from notice join user
+        on
+        notice.publisher_id=user.user_id
+        order by publish_time desc
+    </select>
+
+
+</mapper>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="LeftOption" class="list-group">
+    <a href="/" class=" bg-dark text-white list-group-item list-group-item-action">
+        首页
+    </a>
+    <a href="/toEditBlog" class=" bg-dark text-white list-group-item list-group-item-action">新建博客</a>
+    <a href="/toBlogManage" class=" bg-dark text-white list-group-item list-group-item-action">管理博客</a>
+    <a href="#" class=" bg-dark text-white list-group-item list-group-item-action">随笔</a>
+    <a href="/toMessage" class=" bg-dark text-white list-group-item list-group-item-action ">查看留言</a>
+    <a href="#" class=" bg-dark text-white list-group-item list-group-item-action ">书签</a>
+    <a href="/toMySpace" class=" bg-dark text-white list-group-item list-group-item-action ">个人空间</a>
+    <a href="/toNoticeBoard" class=" bg-dark text-white list-group-item list-group-item-action ">发布公告</a>
+    <a href="/toUserManage" class=" bg-dark text-white list-group-item list-group-item-action ">用户管理</a>
+    <a href="#" class=" bg-dark text-white list-group-item list-group-item-action ">网站设置</a>
+
+</div>
+</body>
+</html>

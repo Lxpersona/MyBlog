@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+
+
+    <script src="/bootstrap/jQuery3_3_1.js"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        h2 {
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+
+
+    <script>
+        $(function () {
+
+            var nameState = false;
+            var pwd1State = false;
+            var pwd2State = false;
+            var emailState = true;
+            var checkState = false;
+            $("#username").blur(function () {
+                if (this.value === '' || this.value === null || this.value.length < 3) {
+                    $(this).next().show().css("color", "red").empty().append("用户名不正确");
+                }
+                else {
+                    var name = $(this).val();
+                    $.get("/isUsernameExist?username=" + name, function (data) {
+                        var nameData = data;
+                        if (nameData === true) {
+                            nameState = false;
+                            $("#username").next().show().css("color", "red").empty().append("用户名已存在");
+                        } else if (nameData === false) {
+                            nameState = true;
+                            $("#username").next().empty().hide();
+                        }
+                    })
+                }
+            })
+
+            $("#pwd1").blur(function () {
+                if ($(this).val().length < 6) {
+                    pwd1State = false;
+                    $(this).next().show().css("color", "red").empty().append("密码长度不能小于6");
+                } else {
+                    pwd1State = true;
+                    $(this).next().empty().hide();
+                }
+            })
+
+            $("#pwd2").blur(function () {
+                if ($(this).val() !== $("#pwd1").val()) {
+                    pwd2State = false;
+                    $(this).next().show().css("color", "red").empty().append("密码不一致")
+                } else {
+                    pwd2State = true;
+                    $(this).next().empty().hide();
+                }
+            })
+
+
+            $("#userEmail").blur(function () {
+                var email = $(this).val();
+                $.get(context + "/isEmailExist?userEmail=" + email, function (data) {
+                    var emailData = data;
+                    if (emailData === true) {
+                        emailState = false;
+                        $("#userEmail").next().show().css("color", "red").empty().append("邮箱已被使用");
+                    }
+                    else {
+                        emailState = true;
+                        $("#userEmail").next().hide().empty();
+                    }
+                })
+
+            })
+
+            $(":checkbox").click(function () {
+                if ($(this).is(':checked')) {
+                    checkState = true;
+                }
+                else {
+                    checkState = false;
+            }
+            })
+
+
+            $(":submit").click(function () {
+                if (nameState && pwd1State && pwd2State && emailState) {
+                    return true;
+                } else
+                    return false;
+            })
+
+        })
+    </script>
+
+</head>
+
+
+<body>
+
+<div class="container-fluid">
+    <h2><a href="#">注册</a></h2>
+
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 table-bordered">
+            <form  action="/register" method="post">
+                <br><br>
+                <div class="form-group">
+                    <label for="username">请输入账号:</label>
+                    <input type="text" id="username" name="username" class="form-control">
+                    <span disabled="false"></span>
+                </div>
+                <div class="form-group">
+                    <label for="username">请输入用户名:</label>
+                    <input type="text" id="nickname" name="nickname" class="form-control">
+                    <span disabled="false"></span>
+                </div>
+                <div class="form-group">
+                    <label for="pwd1">请输入密码：</label>
+                    <input type="password" id="pwd1" name="password" class="form-control">
+                    <span disabled="false"></span>
+                </div>
+                <div class="form-group">
+                    <label for="pwd2">确认密码：</label>
+                    <input type="password" id="pwd2" class="form-control">
+                    <span disabled="false"></span>
+                </div>
+                <div class="form-group">
+                    <label for="email">请输入邮箱：</label>
+                    <input type="email" id="email" name="userEmail" class="form-control">
+                    <span disabled="false"></span>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"> 同意<a href="#">《用户协议》</a>
+                    </label>
+                </div>
+                <input type="submit" value="注册" class="btn btn-primary form-control">
+                <br><br>
+            </form>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+
+</div>
+</body>
+</html>

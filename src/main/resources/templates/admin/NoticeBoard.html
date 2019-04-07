@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/bootstrap/jQuery3_3_1.js"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
+</head>
+<body>
+<div class="container-fluid">
+    <div th:replace="~{admin/TopNav::TopNav}"></div>
+
+    <div class="row">
+
+        <div class="col-md-2">
+            <div th:replace="~{admin/LeftOption::LeftOption}"></div>
+
+        </div>
+        <div class="col-md-10">
+            <div style="margin-top: 30px">
+                <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#editNotice">
+                    发布公告
+                </button>
+            </div>
+            <hr color="grey">
+            <h3>历史公告</h3>
+            <div>
+                <table class="table table-hover">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">序号</th>
+                        <th scope="col">发布者</th>
+                        <th scope="col">标题</th>
+                        <th scope="col">发布时间</th>
+                        <th scope="col">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <h3 th:text="没有内容" th:if="${noticeCount==0}"></h3>
+                    <tr th:each="notice,iterStat:${pageInfo.list}">
+                        <td th:text="${iterStat.count}"></td>
+                        <td th:text="${notice.user.nickname}"></td>
+                        <td th:text="${notice.publishTitle}"></td>
+                        <td th:text="${#calendars.format(notice.publishTime,'yyyy年MM月dd日   HH:mm')}"></td>
+                        <td>
+                            <button class="btn-sm btn btn-success" data-toggle="modal"
+                                    th:attr="data-target='#noticeDetail'+${iterStat.count}">查看内容
+                            </button>
+                            <button class="btn-sm btn btn-danger">删除记录</button>
+                            <div class="modal fade" th:id="noticeDetail+${iterStat.count}" tabindex="-1" role="dialog"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header" th:text="${notice.publishTitle}">Modal title</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div th:text="${notice.publishText}" class="modal-body">
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <!--page-->
+                <nav style="margin-right: 100px" aria-label="Page navigation example">
+                    <ul class="pagination justify-content-end">
+                        <th:block th:if="${pageInfo.hasPreviousPage}">
+                            <li  class=" page-item">
+                                <a class="page-link" th:href="@{/notices/list(startPage=${pageInfo.prePage})}" href="#" tabindex="-1">Previous</a>
+                            </li>
+                        </th:block>
+                        <th:block th:if="${!pageInfo.hasPreviousPage}">
+                            <li  class="disabled page-item">
+                                <a class="page-link"  href="#" tabindex="-1">Previous</a>
+                            </li>
+                        </th:block>
+                        <li th:class="${page}==${nPage}?'page-item disabled':'page-item'"  th:each="page:${pageInfo.navigatepageNums}" class="page-item">
+                            <a class="page-link" th:text="${page}" th:href="@{/notices/list(startPage=${page})}" href="#"></a>
+                        </li>
+                        <th:block th:if="${pageInfo.hasNextPage}">
+                            <li  class="page-item">
+                                <a class="page-link" th:href="@{/notices/list(startPage=${pageInfo.nextPage})}" href="#">Next</a>
+                            </li>
+                        </th:block>
+                        <th:block th:if="${not pageInfo.hasNextPage}">
+                            <li  class="page-item disabled">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </th:block>
+                    </ul>
+                </nav>
+                <!--page end-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="editNotice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">编辑公告</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="noticeForm">
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">标题</label>
+                        <input type="text" class="form-control" name="publishTitle" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">内容</label>
+                        <textarea class="form-control" name="publishText" id="message-text"></textarea>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消编辑</button>
+                    <button type="submit" class="btn btn-primary">发布内容</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--MODEL-->
+
+<div class="modal fade" id="noticeDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--  ================= -->
+<script>
+    $(function () {
+        $("#noticeForm").on("submit", function () {
+            $.ajax({
+                    url: "/newNotice",
+                    data: $("#noticeForm").serialize(),
+                    type: "POST",
+                    success: function (info) {
+                        if (info == "success") {
+                            window.location.reload();
+                        }
+                    }
+                }
+            )
+            return false;
+        })
+
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/bootstrap/jQuery3_3_1.js"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12" style="margin-bottom: 10px">
+            <div th:replace="~{public/TopNav.html::commonNav}"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="card border-primary">
+                <h5 class="card-header bg-primary text-white">通过电子邮件</h5>
+                <div class="card-body">
+                    <h5 class="card-title">1952770178@qq.com</h5>
+                    <!--<a href="#" class="btn btn-primary"></a>-->
+                </div>
+            </div>
+
+            <br><br>
+            <div class="card border-success">
+                <h5 class="card-header bg-success text-white">在线留言</h5>
+                <div class="card-body">
+                    <!--<h5 class="card-title">Special title treatment</h5>-->
+                    <p class="card-text">您可以留下联系方式以便与学习和交流！</p>
+                   <!-- <a href="#" class="btn btn-primary">Go somewhere</a>-->
+                    <form id="messageForm">
+
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">您的称呼</label>
+                            <input type="text" class="form-control" name="messageFrom" id="exampleInputPassword1" placeholder="你的称呼">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">联系方式</label>
+                            <input type="text" name="messageContact" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="QQ,Email,WeChat...都可以哦！">
+                            <small id="emailHelp" class="form-text text-muted"></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">留言内容</label>
+                            <textarea class="form-control" name="messageText" id="exampleFormControlTextarea1" rows="4"></textarea>
+                        </div>
+                        <button type="submit" style="margin-left: 400px" class="btn btn-primary"> 提交</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12" style="margin-top: 100px">
+            <div th:replace="~{public/footer.html::footer}"></div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+
+        $("#messageForm").on("submit",function () {
+            $.ajax({
+                url:"/leaveMessage",
+                type:"POST",
+                data:$("#messageForm").serialize(),
+                success:function (data) {
+                    if(data==="success"){
+                        alert("留言成功")
+                    }
+                }
+            })
+
+            return false;
+        })
+
+
+
+
+
+    })
+
+</script>
+</body>
+</html>

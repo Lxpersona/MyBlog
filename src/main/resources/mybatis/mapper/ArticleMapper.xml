@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lxpnow.blog.mapper.ArticleMapper">
+
+    <sql id="articleColumn">
+        article_title,article_html,article_markdown,
+        article_view,create_time,update_time,access_level,
+      article_status,keywords,comment_count,
+        article_summary,article_like,article_type,update_count,article_short
+    </sql>
+
+    <resultMap id="articleInfo" type="Article">
+        <id property="articleId" column="article_id"></id>
+        <result property="articleTitle" column="article_title"></result>
+        <result property="articleHtml" column="article_html"></result>
+        <result property="articleMarkdown" column="article_markdown"></result>
+        <result property="articleView" column="article_view"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="updateTime" column="update_time"></result>
+        <result property="accessLevel" column="access_level"></result>
+        <result property="userId" column="user_id"></result>
+        <result property="articleStatus" column="article_status"></result>
+        <result property="keywords" column="keywords"></result>
+        <result property="updateCount" column="comment_count"></result>
+        <result property="articleSummary" column="article_summary"></result>
+        <result property="articleLike" column="article_like"></result>
+        <result property="articleType" column="article_type"></result>
+        <result property="updateCount" column="update_count"></result>
+        <result property="articleShort" column="article_short"></result>
+        <association property="user" javaType="User">
+            <id property="userId" column="user_id"></id>
+            <result property="username" column="username"></result>
+            <result property="nickname" column="nickname"></result>
+        </association>
+    </resultMap>
+
+
+    <insert id="saveArticle" keyProperty="articleId" parameterType="Article" useGeneratedKeys="true">
+        insert into article( article_title,article_html,article_markdown,
+        article_view,create_time,update_time,access_level,
+        user_id,article_status,keywords,comment_count,
+        article_summary,article_like,article_type,update_count,article_short)
+        values(
+        #{articleTitle},#{articleHtml},#{articleMarkdown},#{articleView},#{createTime},#{updateTime},
+        #{accessLevel},#{userId},#{articleStatus},#{keywords},#{commentCount},
+        #{articleSummary},#{articleLike},#{articleType},#{updateCount},#{articleShort} )
+    </insert>
+
+    <select id="getAllArticles" resultMap="articleInfo">
+        select article_id,<include refid="articleColumn" ></include> ,
+        user.user_id,username,nickname,user_role
+        from  article
+        inner join
+        user
+        on article.user_id=user.user_id
+        order by
+        create_time desc
+    </select>
+
+    <select id="getArticleById" resultType="Article">
+        select article_id,<include refid="articleColumn" ></include>
+        from article
+        inner join
+        user
+        on
+        article.user_id=user.user_id
+        where article_id=#{id}
+    </select>
+
+
+    <update id="addViewCount"  >
+        update article set
+        article_view=article_view+1
+        where
+        article_id=#{id}
+    </update>
+
+
+    <select id="getArticlesByTitleLike" resultMap="articleInfo">
+        select article_id,<include refid="articleColumn"></include>
+        user.user_id,username,nickname
+        from article
+        inner join
+        user
+        on
+        article.user_id=user.user_id
+        where
+        article_title like #{str}
+    </select>
+
+    <select id="getArticlesByTitleOrKeywordsLike" resultMap="articleInfo">
+        select article_id,<include refid="articleColumn"></include>,
+        user.user_id,username,nickname
+        from article
+        inner join
+        user
+        on
+        article.user_id=user.user_id
+        where
+        keywords like #{str}
+        or
+        article_title like #{str}
+        order by
+        create_time desc
+    </select>
+
+</mapper>

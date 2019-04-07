@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lxpnow.blog.mapper.UserMapper">
+    <select id="getUserByUsername" parameterType="string" resultType="User">
+    select * from user where
+      username=#{username}
+    </select>
+
+    <insert id="saveUser" parameterType="User" useGeneratedKeys="true" keyProperty="userId" >
+        insert into user(username,password,nickname,user_email,user_image,user_role)
+        values (#{username},#{password},#{nickname},#{userEmail},#{userImage},#{userRole})
+    </insert>
+
+</mapper>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/bootstrap/jQuery3_3_1.js"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/editor/style.css">
+    <link rel="stylesheet" href="/editor/css/editormd.css">
+    <script src="editor/editormd.min.js"></script>
+ <!--   <script src="/editor/wangEditor.min.js"></script>
+    <script src="/editor/wangEditor-fullscreen-plugin.js"></script>
+    <link rel="stylesheet" href="/editor/wangEditor-fullscreen-plugin.css">
+-->
+</head>
+<body>
+<div class="container-fluid">
+    <div th:replace="~{admin/TopNav::TopNav}"></div>
+    <form id="blogArticle">
+    <div class="row">
+
+        <div class="col-md-2">
+            <div th:fragment="LeftOption" class="list-group">
+                <a href="/" class=" bg-dark text-white list-group-item list-group-item-action">
+                    首页
+                </a>
+                <a href="/toBlogManage" class=" bg-dark text-white list-group-item list-group-item-action">管理中心</a>
+                <a href="/toMessage" class=" bg-dark text-white list-group-item list-group-item-action ">博客管理</a>
+                <button type="submit" class="btn-lg btn-success"><a >保存内容</a></button>
+            </div>
+
+        </div>
+        <div class="col-md-10">
+
+            <div class="form-group row ">
+                <label for="articleTitle" class="col-sm-1 col-form-label">博客标题</label>
+                <div class="col-sm-11">
+                    <input type="text" class="form-control" name="articleTitle" id="articleTitle" placeholder="Title">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="keywords" class="col-sm-1 col-form-label">关键字</label>
+                <div class="col-sm-11">
+                    <input type="text" class="form-control" name="keywords" id="keywords" placeholder="Keywords">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="articleImage" class="col-sm-1 col-form-label">显示图片</label>
+                <div class="col-sm-11">
+                    <input type="text" class="form-control" id="articleImage" placeholder="Title">
+                </div>
+            </div>
+
+            <div class="form-group row">
+
+                <label for="access" class="col-sm-1 col-form-label">阅读权限</label>
+                <select class="form-control col-sm-5" name="accessLevel" id="access">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                </select>
+
+                <label for="articleType" class="col-sm-1 col-form-label">文章分类</label>
+                <select class="form-control col-sm-5" name="articleType" id="articleType">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <div style="margin-top: 5px">
+
+                    <hr color="grey">
+                    <div id="editBox">
+                        <textarea id="editBox-markdown-doc" class="editormd-markdown-textarea" name="articleMarkdown" style="display: none"></textarea>
+                        <textarea id="editBox-html-code" class="editormd-html-textarea" name="articleHtml"></textarea>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+    </form>
+
+
+</div>
+
+<script>
+    var markDownEditor;
+    $(function () {
+        markDownEditor = editormd("editBox", {
+            width: "100%",
+            height: 640,
+            syncScrolling: "single",
+            path: "/editor/lib/",
+            theme: "light",
+            codeFold : true,
+            saveHTMLToTextarea : true,
+            imageUpload : true,
+            imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL : "/imageUpload",
+            onchange:function () {
+
+            }
+        });
+
+    });
+
+
+    $("#blogArticle").on("submit",function () {
+        alert(markDownEditor.getMarkdown());
+        alert(markDownEditor.getHTML());
+        $.ajax({
+            url:"/saveBlog",
+            type:"POST",
+            data:$(this).serialize(),
+            success:function (data) {
+                alert(data)
+            }
+        })
+
+        return false;
+    })
+
+
+</script>
+
+<!--<script>
+    var E=window.wangEditor
+    var editor=new E("#editBox");
+    editor.customConfig.uploadImgServer = '/upload'
+    editor.create();
+    E.fullscreen.init('#editBox')
+</script>-->
+</body>
+</html>

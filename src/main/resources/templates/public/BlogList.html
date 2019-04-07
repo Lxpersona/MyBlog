@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>博客文章</title>
+    <script src="/bootstrap/jQuery3_3_1.js"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<style>
+    .articleStart {
+        width: 100%;
+        background: linear-gradient(to right, blue, #CCFFFF);
+    }
+
+    .articleImg {
+        height: 180px;
+        width: 20%;
+        float: left;
+        margin-left: -2px;
+        margin-top: -2px;
+
+    }
+
+    .articleBox {
+        height: 182px;
+        margin-top: 12px;
+        border: lightgray solid;
+        background-color: #FFFFFF;
+    }
+
+    .articleInfo{
+        height: 180px;
+        float: right;
+        width: 78%;
+        padding-top: 10px;
+        position: relative;
+    }
+    .dateAndView{
+        left: 90px;
+        position: absolute;
+        height: 30px;
+        bottom: 5px;
+    }
+    .tags {
+        margin-top: 40px;
+    }
+
+    .userInfoBoard {
+        display: none;
+    }
+
+    .footBox {
+        background: #0C0C0C;
+
+    }
+
+
+    .articleAtag{
+        color: black;
+        text-decoration:none;
+    }
+    .articleAtag:hover{
+        color: #2C7EEA;
+        text-decoration: none;
+    }
+</style>
+<body>
+
+<div  class="container-fluid">
+
+    <!--header-->
+    <div class="row">
+        <div class="col-md-12">
+            <div th:replace="~{public/TopNav.html::commonNav}"></div>
+        </div>
+    </div>
+
+    <!--mid-->
+    <div class="row">
+
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div th:if="${condition!=null}">
+                <h3 ><span th:text="${condition}" ></span>的搜索结果<span th:text="为空" th:if="${articles==null}"></span></h3>
+            </div>
+
+            <div th:if="${articles!=null}">
+                <div class="articleBox" th:each="article:${articles}">
+                    <img class="articleImg" src="/images/e.png">
+                    <div class="articleInfo">
+                        <h3 ><a class="articleAtag" th:href="@{/article/}+${article.articleId}" th:text="${article.articleTitle}" href="#"></a></h3>
+                        <h5 th:text="${article.keywords}">text</h5>
+                        <p th:text="${article.articleShort}"></p>
+                        <div class="dateAndView">
+                            <p class="" ><span class="text-muted" th:text="${#calendars.format(article.createTime,'yyyy-MM-dd')}"></span>
+                                <span style="margin-left: 500px" >浏览量：</span><span th:text="${article.articleView}"></span></p>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-md-2"></div>
+
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12" style="margin-bottom: 200px" ></div>
+    </div>
+
+    <!--footer-->
+  <!--  <div class="row " style="bottom: 0;margin-bottom: 0px;margin-top: 250px ">
+        <div class="col-md-12">
+            <div th:replace="~{public/footer.html::footer}"></div>
+        </div>
+    </div>-->
+</div>
+
+</body>
+</html>

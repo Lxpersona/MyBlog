@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>网站信息</title>
+    <script src="/bootstrap/jQuery3_3_1.js"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div th:replace="~{public/TopNav.html::commonNav}"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+
+            <div class="card w-80 border-dark">
+                <div class="card-body">
+
+                    <p>1. 本网站目前不支持交互式内容，仅可以站长登录，发布博客和公告信息，您可以通过邮箱或留言的方式与我<span><a href="/leaveMessage">交流</a></span></p>
+
+                    <p>2. 本网站是由Springboot+thymeleaf+Bootstrap完成的个人博客系统，博客编写使用editor.md，支持Markdown语法</p>
+
+                    <p>3. 更多功能还在持续开发和优化中...</p>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+</div>
+</body>
+</html>
